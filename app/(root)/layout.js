@@ -1,7 +1,10 @@
-import React from 'react'
 
-export default function layout() {
+import React from 'react';
+
+export default function Layout({ children }) {
   return (
-    <div>layout</div>
+    <main>
+      { children }
+    </main>
   )
 }
