@@ -1,7 +1,3 @@
-hcxdumptool, hcxpcapngtool
-
-
-
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -14,8 +10,8 @@ import {
 } from '@/components/ui/carousel';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
+
 export default function AnimePage() {
-  // Sample movie data - Fixed image paths
   const movies = [
     {
       id: 1,
@@ -37,6 +33,13 @@ export default function AnimePage() {
       description: "Dr. Stephen Strange casts a forbidden spell that opens the doorway to the multiverse and unleashes a threat too great to handle.",
       image: "/Images/7ac24f55b87f9606c6d936a07b0067b5.jpg",
       tag: "TRENDING"
+    },
+    {
+      id: 4,
+      title: "The Demon slayer",
+      description: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption.",
+      image: "/Images/975364bd02272db5d2b3037132c62eb6.jpg",
+      tag: "NEW"
     }
   ];
 
@@ -45,7 +48,6 @@ export default function AnimePage() {
   const [thumbnailApi, setThumbnailApi] = useState();
   const isMobile = useMediaQuery("(max-width: 800px)");
 
-  // Handle slide change
   const handleSlideChange = (index) => {
     setCurrentSlide(index);
     if (api) {
@@ -53,7 +55,6 @@ export default function AnimePage() {
     }
   };
 
-  // Autoplay functionality
   useEffect(() => {
     const timer = setInterval(() => {
       if (api) {
@@ -61,17 +62,15 @@ export default function AnimePage() {
         api.scrollTo(nextSlide);
         setCurrentSlide(nextSlide);
       }
-    }, 5000); // Change slide every 5 seconds
+    }, 5000); 
 
     return () => clearInterval(timer);
   }, [api, currentSlide, movies.length]);
 
-  // Handle API change (for carousel control)
   const handleApiChange = (newApi) => {
     setApi(newApi);
   };
 
-  // Handle thumbnail API change
   const handleThumbnailApiChange = (newApi) => {
     setThumbnailApi(newApi);
   };
@@ -101,7 +100,7 @@ export default function AnimePage() {
                         alt={movie.title}
                         className="w-full h-full object-cover"
                       />
-                      {/* Enhanced gradient overlay for dramatic effect */}
+                      {/* gradient overlay for dramatic effect */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
                       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80"></div>
                       
@@ -113,18 +112,20 @@ export default function AnimePage() {
               ))}
             </CarouselContent>
             
-            {/* Centered navigation buttons - Updated violet theme */}
-            <div className="absolute bottom-1/4 left-0 right-0 flex justify-center items-center px-4 z-30">
-              <CarouselPrevious className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white mr-4 focus:outline-none" />
-              <CarouselNext className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white ml-4 focus:outline-none" />
+            {/* navigation buttons */}
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
+              <div className="ml-2">
+                <CarouselPrevious className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white mr-4 focus:outline-none" />
+              </div>
+                <CarouselNext className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white ml-4 focus:outline-none" />
             </div>
             
-            {/* Custom indicator dots - Made responsive with violet theme */}
-            <div className="absolute bottom-16 left-4 md:left-12 flex items-center space-x-2 z-20">
+            {/* indicator dots */}
+            <div className="absolute bottom-16 left-20 md:left-12 flex items-center space-x-2 z-20">
               {movies.map((_, index) => (
                 <button
                   key={index}
-                  className={`h-1 transition-all duration-300 ${
+                  className={`h-1 transition-all duration-300 rounded-lg ${
                     currentSlide === index 
                       ? "bg-violet-600 w-6" 
                       : "bg-gray-600 w-3 hover:bg-violet-600/80"
@@ -137,7 +138,7 @@ export default function AnimePage() {
           </Carousel>
         </div>
         
-        {/* Main content container - Made responsive */}
+        {/* Main content container */}
         <div className="relative z-30 flex flex-col justify-center h-screen">
           <div className="px-4 md:px-12 max-w-lg h-screen flex flex-col justify-center pt-20 md:pt-0">
             <div className="mb-4 md:mb-6">
@@ -165,96 +166,28 @@ export default function AnimePage() {
                 </svg>
               </button>
             </div>
-            
-            {/* Mobile Thumbnails Carousel */}
-            {isMobile && (
-              <div className="relative mb-4 z-40">
-                <Carousel
-                  className="w-full"
-                  setApi={handleThumbnailApiChange}
-                  opts={{
-                    align: "center",
-                    loop: true,
-                  }}
-                >
-                  <CarouselContent className="flex">
-                    {movies.map((movie, index) => (
-                      <CarouselItem key={movie.id} className="flex justify-center basis-auto">
-                        <button 
-                          onClick={() => handleSlideChange(index)}
-                          className={`group relative flex-shrink-0 transition-all duration-300 ${
-                            currentSlide === index 
-                              ? 'w-28 h-40 z-10' 
-                              : 'w-20 h-32 opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
-                          }`}
-                        >
-                          {/* Glow effect for active thumbnail */}
-                          {currentSlide === index && (
-                            <div className="absolute -inset-1 bg-violet-600/30 blur-md animate-pulse"></div>
-                          )}
-                          
-                          {/* Cover with Diablo-style frame */}
-                          <div className={`absolute inset-0 shadow-lg ${
-                            currentSlide === index 
-                              ? 'border-2 border-violet-500 shadow-violet-600/50' 
-                              : 'border border-violet-900/30'
-                          }`}>
-                            {/* Cover image */}
-                            <img 
-                              src={movie.image} 
-                              alt={movie.title}
-                              className="w-full h-full object-cover"
-                            />
-                            
-                            {/* Dark gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
-                            
-                            {/* Roman numeral for Diablo style */}
-                            <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
-                              {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}
-                            </div>
-                            
-                            {/* Bottom info bar */}
-                            <div className="absolute bottom-0 left-0 right-0">
-                              {/* Glowing line */}
-                              <div className={`h-0.5 w-full ${
-                                currentSlide === index ? 'bg-violet-500' : 'bg-violet-900/50'
-                              }`}></div>
-                              
-                              {/* Title with dark background */}
-                              <div className="bg-black/90 p-1">
-                                <h5 className="text-xs text-white font-medium line-clamp-1">{movie.title}</h5>
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  
-                  {/* Navigation buttons for thumbnails carousel */}
-                  <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 h-8 w-8 rounded-full bg-black/60 hover:bg-violet-900/70 border border-violet-800/70 text-white focus:outline-none" />
-                  <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 h-8 w-8 rounded-full bg-black/60 hover:bg-violet-900/70 border border-violet-800/70 text-white focus:outline-none" />
-                </Carousel>
-              </div>
-            )}
           </div>
         </div>
 
         {/* Desktop thumbnails carousel */}
         {!isMobile && (
-          <div className="absolute bottom-16 right-8 z-40">
+          <div className="absolute bottom-22 right-12 z-40">
             <Carousel
-              className="w-full"
+              className="w-full border"
               setApi={handleThumbnailApiChange}
               opts={{
-                align: "center",
-                loop: true,
+                align: "center", 
+                loop: true,      
               }}
             >
-              <CarouselContent className="flex">
+              <CarouselContent className="flex pt-2 overflow-hidden">
                 {movies.map((movie, index) => (
-                  <CarouselItem key={movie.id} className="flex justify-center basis-auto">
+                  <CarouselItem
+                    key={movie.id}
+                    className={`my-auto justify-center basis-1/3 px-1 transition-transform duration-300 ${
+                      currentSlide === index ? 'scale-105 z-10' : 'opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                    }`}
+                  >
                     <button 
                       onClick={() => handleSlideChange(index)}
                       className={`group relative flex-shrink-0 transition-all duration-300 ${
@@ -278,10 +211,11 @@ export default function AnimePage() {
                           className="w-full h-full object-cover"
                         />
                         
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60
+                         to-black/20"></div>
                         
                         <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
-                          {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}
+                          {index === 0 ? 'I' : index === 1 ? 'II' : 'IV'}
                         </div>
                         
                         <div className="absolute bottom-0 left-0 right-0">
@@ -298,15 +232,11 @@ export default function AnimePage() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              
-              {/* Navigation buttons for thumbnails carousel */}
-              <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 h-8 w-8 rounded-full bg-black/60 hover:bg-violet-900/70 border border-violet-800/70 text-white focus:outline-none" />
-              <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 h-8 w-8 rounded-full bg-black/60 hover:bg-violet-900/70 border border-violet-800/70 text-white focus:outline-none" />
             </Carousel>
           </div>
         )}
 
-        {/* Footer area - Made responsive with violet theme */}
+        {/* Footer area */}
         <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col md:flex-row justify-between items-center px-4 md:px-12 py-4 bg-gradient-to-t from-black to-transparent">
           <div className="flex items-center space-x-6 mb-2 md:mb-0">
             <div className="flex items-center space-x-2">
@@ -340,7 +270,3 @@ export default function AnimePage() {
     </div>
   );
 }
-
-
-
-
