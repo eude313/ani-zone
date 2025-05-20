@@ -300,7 +300,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div class="relative ">
+      <div className="relative ">
         <div className=' z-10 w-6 h-6 rounded-full bg-purple-500 border-4 border-purple-700
         '></div>
       </div>

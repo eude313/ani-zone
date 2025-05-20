@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Carousel,
   CarouselContent,
@@ -53,6 +53,9 @@ export default function AnimePage() {
     if (api) {
       api.scrollTo(index);
     }
+    if (thumbnailApi) {
+      thumbnailApi.scrollTo(index);
+    }
   };
 
   useEffect(() => {
@@ -61,11 +64,14 @@ export default function AnimePage() {
         const nextSlide = (currentSlide + 1) % movies.length;
         api.scrollTo(nextSlide);
         setCurrentSlide(nextSlide);
+        if (thumbnailApi) {
+          thumbnailApi.scrollTo(nextSlide);
+        }
       }
     }, 5000); 
 
     return () => clearInterval(timer);
-  }, [api, currentSlide, movies.length]);
+  }, [api, thumbnailApi, currentSlide, movies.length]);
 
   const handleApiChange = (newApi) => {
     setApi(newApi);
@@ -73,7 +79,35 @@ export default function AnimePage() {
 
   const handleThumbnailApiChange = (newApi) => {
     setThumbnailApi(newApi);
+    if (newApi && currentSlide !== undefined) {
+      setTimeout(() => {
+        newApi.scrollTo(currentSlide);
+      }, 100);
+    }
   };
+
+  useEffect(() => {
+    if (api) {
+      const handleSelect = () => {
+        const selectedIndex = api.selectedScrollSnap();
+        setCurrentSlide(selectedIndex);
+        if (thumbnailApi) {
+          thumbnailApi.scrollTo(selectedIndex);
+        }
+      };
+      
+      api.on('select', handleSelect);
+      return () => {
+        api.off('select', handleSelect);
+      };
+    }
+  }, [api, thumbnailApi]);
+  
+  useEffect(() => {
+    if (thumbnailApi && currentSlide !== undefined) {
+      thumbnailApi.scrollTo(currentSlide);
+    }
+  }, [currentSlide, thumbnailApi]);
 
   return (
     <div>
@@ -115,9 +149,23 @@ export default function AnimePage() {
             {/* navigation buttons */}
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
               <div className="ml-2">
-                <CarouselPrevious className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white mr-4 focus:outline-none" />
+                <CarouselPrevious 
+                  className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70
+                   text-white mr-4 focus:outline-none" 
+                  onClick={() => {
+                    const prevSlide = (currentSlide - 1 + movies.length) % movies.length;
+                    handleSlideChange(prevSlide);
+                  }}
+                />
               </div>
-                <CarouselNext className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white ml-4 focus:outline-none" />
+              <CarouselNext 
+                className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70
+                 text-white ml-4 focus:outline-none" 
+                onClick={() => {
+                  const nextSlide = (currentSlide + 1) % movies.length;
+                  handleSlideChange(nextSlide);
+                }}
+              />
             </div>
             
             {/* indicator dots */}
@@ -168,63 +216,74 @@ export default function AnimePage() {
             </div>
           </div>
         </div>
-
-        {/* Desktop thumbnails carousel */}
+        
+        {/* Desktop thumbnails */}
         {!isMobile && (
-          <div className="absolute bottom-22 right-12 z-40">
+          <div className="absolute bottom-24 right-12 z-40 w-auto">
             <Carousel
-              className="w-full border"
+              className="w-full"
               setApi={handleThumbnailApiChange}
               opts={{
-                align: "center", 
-                loop: true,      
+                align: "center",
+                loop: true,
+                slidesToScroll: 1,
               }}
+              value={currentSlide.toString()}
             >
-              <CarouselContent className="flex pt-2 overflow-hidden">
+              <CarouselContent className="flex gap-2 px-2">
                 {movies.map((movie, index) => (
                   <CarouselItem
                     key={movie.id}
-                    className={`my-auto justify-center basis-1/3 px-1 transition-transform duration-300 ${
-                      currentSlide === index ? 'scale-105 z-10' : 'opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                    value={index.toString()}
+                    className={`basis-auto flex-shrink-0 transition-all duration-300 my-auto ${
+                      currentSlide === index ? 'z-10' : ''
                     }`}
                   >
-                    <button 
+                    <button
                       onClick={() => handleSlideChange(index)}
-                      className={`group relative flex-shrink-0 transition-all duration-300 ${
-                        currentSlide === index 
-                          ? 'w-36 h-52 z-10' 
-                          : 'w-28 h-40 opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
-                      }`}
+                      className="relative"
                     >
-                      {currentSlide === index && (
-                        <div className="absolute -inset-1 bg-violet-600/30 blur-md animate-pulse"></div>
-                      )}
-                      
-                      <div className={`absolute inset-0 shadow-lg ${
-                        currentSlide === index 
-                          ? 'border-2 border-violet-500 shadow-violet-600/50' 
-                          : 'border border-violet-900/30'
+                      <div className={`group relative transition-all duration-300 ${
+                        currentSlide === index
+                          ? 'w-36 h-52 z-10'
+                          : 'w-28 h-40 opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
                       }`}>
-                        <img 
-                          src={movie.image} 
-                          alt={movie.title}
-                          className="w-full h-full object-cover"
-                        />
+                        {/* Glow effect for active thumbnail */}
+                        {currentSlide === index && (
+                          <div className="absolute -inset-1 bg-violet-600/30 blur-md animate-pulse rounded-lg"></div>
+                        )}
                         
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60
-                         to-black/20"></div>
-                        
-                        <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
-                          {index === 0 ? 'I' : index === 1 ? 'II' : 'IV'}
-                        </div>
-                        
-                        <div className="absolute bottom-0 left-0 right-0">
-                          <div className={`h-0.5 w-full ${
-                            currentSlide === index ? 'bg-violet-500' : 'bg-violet-900/50'
-                          }`}></div>
+                        <div className={`absolute inset-0 shadow-lg rounded-md ${
+                          currentSlide === index
+                            ? 'border-2 border-violet-500 shadow-violet-600/50'
+                            : 'border border-violet-900/30'
+                        }`}>
+                          {/* Cover image */}
+                          <img
+                            src={movie.image}
+                            alt={movie.title}
+                            className="w-full h-full object-cover rounded-md"
+                          />
                           
-                          <div className="bg-black/90 p-2">
-                            <h5 className="text-xs text-white font-medium line-clamp-1">{movie.title}</h5>
+                          {/* Dark gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
+                          
+                          {/* Roman numeral for Diablo style */}
+                          <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
+                            {index === 0 ? 'I' : index === 1 ? 'II' : index === 2 ? 'III' : 'IV'}
+                          </div>
+                          
+                          {/* Bottom info bar */}
+                          <div className="absolute bottom-0 left-0 right-0">
+                            {/* Glowing line */}
+                            <div className={`h-0.5 w-full ${
+                              currentSlide === index ? 'bg-violet-500' : 'bg-violet-900/50'
+                            }`}></div>
+                            
+                            {/* Title with dark background */}
+                            <div className="bg-black/90 p-2 rounded-b-md">
+                              <h5 className="text-xs text-white font-medium line-clamp-1">{movie.title}</h5>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -237,7 +296,8 @@ export default function AnimePage() {
         )}
 
         {/* Footer area */}
-        <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col md:flex-row justify-between items-center px-4 md:px-12 py-4 bg-gradient-to-t from-black to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col md:flex-row justify-between items-center 
+        px-4 md:px-12 py-4 bg-gradient-to-t from-black to-transparent">
           <div className="flex items-center space-x-6 mb-2 md:mb-0">
             <div className="flex items-center space-x-2">
               <span className="text-gray-500 text-xs">Rating:</span>

@@ -57,8 +57,6 @@ export default function MangaPage() {
           </div>
         </div>
       </div>
-
-    
       <section className="relative bg-[#0a0a23] py-24 flex flex-col items-center justify-center text-white overflow-hidden">
         {/* Concentric Circles */}
         <div className="absolute rounded-full border border-white/10 w-[400px] h-[400px]"></div>
@@ -87,6 +85,137 @@ export default function MangaPage() {
           ))}
         </div>
       </section>
+
+
+
+
+
+           
+        {/* Desktop thumbnails carousel functions the way i want but does not have the styles i require */}
+        {!isMobile && (
+          <div className="absolute bottom-24 right-12 z-40 w-96">
+            <Carousel
+              className="w-full p-2 border border-amber-300"
+              setApi={handleThumbnailApiChange}
+              opts={{
+                align: "center", 
+                loop: true,
+                slidesToScroll: 1,
+              }}
+              value={currentSlide.toString()}
+            >
+              <CarouselContent className="gap-4">
+                {movies.map((movie, index) => (
+                  <CarouselItem
+                    key={movie.id}
+                    value={index.toString()}
+                    className={`basis-1/3 transition-all duration-300 px-1 my-auto ${
+                      currentSlide === index ? 'z-10' : ''
+                    }`}
+                  >
+                    <button 
+                      onClick={() => handleSlideChange(index)}
+                      className="relative w-full"
+                    >
+                      <div className={`relative ${
+                        currentSlide === index ? 'h-44' : 'h-42'
+                      } transition-all duration-300`}>
+                        {currentSlide === index && (
+                          <div className="absolute -inset-1 bg-violet-600/30 blur-md animate-pulse rounded-md"></div>
+                        )}
+                        
+                        <div className={`absolute inset-0 shadow-lg transition-all ${
+                          currentSlide === index 
+                            ? 'border-2 border-violet-500 shadow-violet-600/50 scale-110' 
+                            : 'border border-violet-900/30 opacity-70'
+                        }`}>
+                          <img 
+                            src={movie.image} 
+                            alt={movie.title}
+                            className="w-full h-full object-cover"
+                          />
+                          
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
+                          
+                          <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
+                            {index === 0 ? 'I' : index === 1 ? 'II' : index === 2 ? 'III' : 'IV'}
+                          </div>
+                          
+                          <div className="absolute bottom-0 left-0 right-0">
+                            <div className={`h-0.5 w-full ${
+                              currentSlide === index ? 'bg-violet-500' : 'bg-violet-900/50'
+                            }`}></div>
+                            
+                            <div className="bg-black/90 p-2">
+                              <h5 className="text-xs text-white font-medium line-clamp-1">{movie.title}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        )}
+      
+            {/* thumbnail navigation - contains the design i want but lucks the functionality i want */}
+            {!isMobile && (
+              <div className="absolute bottom-12 right-8 z-40 flex justify-end items-end space-x-6 px-0">
+                {movies.map((movie, index) => (
+                  <button 
+                    key={movie.id}
+                    onClick={() => handleSlideChange(index)}
+                    className={`group relative flex-shrink-0 transition-all duration-300 ${
+                      currentSlide === index 
+                        ? 'w-36 h-52 z-10' 
+                        : 'w-28 h-40 opacity-80 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                    }`}
+                  >
+                    {/* Glow effect for active thumbnail */}
+                    {currentSlide === index && (
+                      <div className="absolute -inset-1 bg-violet-600/30 blur-md animate-pulse"></div>
+                    )}
+                    
+                    {/* Cover with Diablo-style frame */}
+                    <div className={`absolute inset-0 shadow-lg ${
+                      currentSlide === index 
+                        ? 'border-2 border-violet-500 shadow-violet-600/50' 
+                        : 'border border-violet-900/30'
+                    }`}>
+                      {/* Cover image */}
+                      <img 
+                        src={movie.image} 
+                        alt={movie.title}
+                        className="w-full h-full object-cover"
+                      />
+                      
+                      {/* Dark gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
+                      
+                      {/* Roman numeral for Diablo style */}
+                      <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
+                        {index === 0 ? 'I' : index === 1 ? 'II' : 'III'}
+                      </div>
+                      
+                      {/* Bottom info bar */}
+                      <div className="absolute bottom-0 left-0 right-0">
+                        {/* Glowing line */}
+                        <div className={`h-0.5 w-full ${
+                          currentSlide === index ? 'bg-violet-500' : 'bg-violet-900/50'
+                        }`}></div>
+                        
+                        {/* Title with dark background */}
+                        <div className="bg-black/90 p-2">
+                          <h5 className="text-xs text-white font-medium line-clamp-1">{movie.title}</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
     </div>
   );
 }

@@ -3,11 +3,13 @@
 import Bottombar from '@/components/Bottombar';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function MainLayout({ children }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const containerRef = useRef(null);
   
   useEffect(() => {
     setIsMounted(true);
@@ -22,6 +24,28 @@ export default function MainLayout({ children }) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Handle scroll detection - improved version
+  useEffect(() => {
+    // IMPORTANT: Reference the container div (parent), not the main element
+    const containerElement = containerRef.current;
+    
+    if (!containerElement) return;
+    
+    const handleScroll = () => {
+      // Add console logging for debugging
+      console.log('Scroll position:', containerElement.scrollTop);
+      setIsScrolled(containerElement.scrollTop > 20);
+    };
+    
+    // Initial check in case page loads already scrolled
+    handleScroll();
+    
+    containerElement.addEventListener('scroll', handleScroll);
+    return () => {
+      containerElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMounted]);
 
   if (!isMounted) {
     return null;
@@ -38,9 +62,12 @@ export default function MainLayout({ children }) {
       >
         <Sidebar/>  
       </aside>
-      <div className="flex-1 overflow-y-auto">
-        <Navbar/>
-        <main className="overflow-x-hidden overflow-y-auto -mt-[46px] h-[100rem]">
+      {/* Apply ref to this container div instead of the main element */}
+      <div className="flex-1 overflow-y-auto" ref={containerRef}>
+        <Navbar isScrolled={isScrolled}/>
+        <main 
+          className="overflow-x-hidden overflow-y-hidden -mt-[52px] h-[100rem]"
+        >
           {children}
         </main>
         <div className='h-auto w-full z-50 fixed sm:hidden bottom-0 left-0 right-0 sm:mb-3'>

@@ -1,63 +1,108 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button'
-import { LogIn, PanelLeft } from "lucide-react"
+import { Search } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
-export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-  const handleScroll = () => {
-    console.log("ScrollY:", window.scrollY); 
-    if (window.scrollY > 10) {
-      setIsScrolled(true);
-    } else {
-      setIsScrolled(false);
-    }
+export default function Navbar({ isScrolled }) {
+  const pathname = usePathname();
+  
+  const generateBreadcrumbs = () => {
+    if (!pathname) return [];
+    const segments = pathname.split('/').filter(segment => segment);
+    const breadcrumbs = [];
+    let path = '';
+    
+    breadcrumbs.push({
+      href: '/',
+      label: 'Home',
+      isCurrent: pathname === '/'
+    });
+    
+    segments.forEach((segment, index) => {
+      path += `/${segment}`;
+      const label = segment
+        .replace(/-/g, ' ')
+        .replace(/_/g, ' ')
+        .replace(/^\w/, c => c.toUpperCase());
+      
+      breadcrumbs.push({
+        href: path,
+        label,
+        isCurrent: index === segments.length - 1
+      });
+    });
+    
+    return breadcrumbs;
   };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
-
-
+  const breadcrumbs = generateBreadcrumbs();
+  
   return (
-    <nav
-        className={`sticky top-0 left-0 right-0 z-50 flex items-center justify-between py-2 px-4 md:px-8 transition-all duration-300 ${
-            isScrolled
-            ?"bg-black/40 backdrop-blur-md backdrop-saturate-150 " 
-            :"bg-gradient-to-b from-black/90 to-transparent" 
-        }`}
+    <nav 
+      className={`sticky top-0 left-0 right-0 z-50 flex items-center py-2 px-2 md:px-8 transition-all duration-300 ${
+        isScrolled ? 'bg-black/40 backdrop-blur-md backdrop-saturate-150' :
+         'bg-gradient-to-b from-black/90 to-transparent'
+      }`}
     >
-
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6 text-white">
-        <PanelLeft className="-ml-3" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        <h1 className="text-xl font-bold uppercase">
-          ani<span className="text-violet-600"> zone</span>
-        </h1>
+      {/* Left section */}
+      <div className="flex items-center flex-shrink-0 overflow-x-auto mr-1 font-semibold">
+        <Breadcrumb>
+          <BreadcrumbList>
+            {breadcrumbs.map((breadcrumb, index) => (
+              <React.Fragment key={breadcrumb.href}>
+                <BreadcrumbItem>
+                  {breadcrumb.isCurrent ? (
+                    <BreadcrumbPage className="text-violet-400 whitespace-nowrap">
+                      {breadcrumb.label}
+                    </BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink className="text-white hover:text-violet-400 whitespace-nowrap">
+                      <Link  href={breadcrumb.href}>{breadcrumb.label}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+                {index < breadcrumbs.length - 1 && (
+                  <BreadcrumbSeparator className="text-white" />
+                )}
+              </React.Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <div className="relative">
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="bg-black/60 border border-violet-900/50 text-sm py-1 px-3 rounded-sm w-1/2 md:w-44 focus:outline-none focus:border-violet-600 text-gray-300"
+      {/* Middle section */}
+      <div className="flex-1 mx-2">
+        <div className="relative w-full">
+          <input
+            className="w-full h-10 px-4 py-2 bg-black/60 text-white placeholder-zinc-400 rounded-md 
+            focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
+            placeholder="Search..."
+            type="text"
           />
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
+          <Button 
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-zinc-400 hover:text-white 
+            bg-transparent rounded-lg cursor-pointer" size="icon"
+          >
+            <Search/>
+          </Button>
         </div>
-        <Button className="px-3 uppercase">
-          <LogIn /> Login
-        </Button>
+      </div>
+
+      {/* Right section */}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <Separator
+          orientation="vertical"
+          className="mx-2 data-[orientation=vertical]:h-6 bg-violet-600"
+        />
+        <Avatar className="text-sm font-medium">
+          <AvatarImage src="/Images/logo-1.png" />
+          <AvatarFallback>AN</AvatarFallback>
+        </Avatar>
       </div>
     </nav>
   );
