@@ -9,6 +9,7 @@ export default function MainLayout({ children }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const containerRef = useRef(null);
   
   useEffect(() => {
@@ -25,48 +26,50 @@ export default function MainLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle scroll detection - improved version
   useEffect(() => {
-    // IMPORTANT: Reference the container div (parent), not the main element
     const containerElement = containerRef.current;
-    
     if (!containerElement) return;
-    
     const handleScroll = () => {
-      // Add console logging for debugging
-      console.log('Scroll position:', containerElement.scrollTop);
       setIsScrolled(containerElement.scrollTop > 20);
     };
     
-    // Initial check in case page loads already scrolled
     handleScroll();
-    
     containerElement.addEventListener('scroll', handleScroll);
     return () => {
       containerElement.removeEventListener('scroll', handleScroll);
     };
   }, [isMounted]);
 
+  const handleToggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
   if (!isMounted) {
     return null;
   }
 
+  const effectiveCollapsed = isScreenSmall || isSidebarCollapsed;
+  const sidebarWidth = effectiveCollapsed ? '70px' : '245px';
+
   return (
     <div className="flex h-screen overflow-hidden">
       <aside
-        className={`border-r border-[#DBDBDB] shrink hidden sm:block z-10 
-        ${isScreenSmall ? 'w-[70px]' : 'w-[245px]'} 
-        h-screen overflow-hidden py-[8px] dark:border-[#262626]
-        ${isScreenSmall ? 'px-[6px]' : 'px-[12px]'}`}
+        className={`border-r border-[#DBDBDB] shrink-0 hidden sm:block z-10 
+        h-screen overflow-hidden py-[8px] dark:border-[#262626] transition-all duration-300 ease-in-out
+        ${effectiveCollapsed ? 'px-[6px]' : 'px-[12px]'}`}
+        style={{ width: sidebarWidth }}
         aria-label="Sidebar"
       >
-        <Sidebar/>  
+        <Sidebar 
+          isCollapsed={effectiveCollapsed}
+          isScreenSmall={isScreenSmall}
+          onToggleCollapse={handleToggleSidebar}
+        />  
       </aside>
-      {/* Apply ref to this container div instead of the main element */}
       <div className="flex-1 overflow-y-auto" ref={containerRef}>
         <Navbar isScrolled={isScrolled}/>
         <main 
-          className="overflow-x-hidden overflow-y-hidden -mt-[52px] h-[100rem]"
+          className="overflow-x-hidden overflow-y-hidden -mt-[56px] h-[100rem]"
         >
           {children}
         </main>

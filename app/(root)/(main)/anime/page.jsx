@@ -150,8 +150,7 @@ export default function AnimePage() {
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40">
               <div className="ml-2">
                 <CarouselPrevious 
-                  className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70
-                   text-white mr-4 focus:outline-none" 
+                  className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white mr-4 focus:outline-none" 
                   onClick={() => {
                     const prevSlide = (currentSlide - 1 + movies.length) % movies.length;
                     handleSlideChange(prevSlide);
@@ -159,8 +158,7 @@ export default function AnimePage() {
                 />
               </div>
               <CarouselNext 
-                className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70
-                 text-white ml-4 focus:outline-none" 
+                className="h-12 w-12 rounded-full bg-black/60 hover:bg-violet-900/70 border-2 border-violet-800/70 text-white ml-4 focus:outline-none" 
                 onClick={() => {
                   const nextSlide = (currentSlide + 1) % movies.length;
                   handleSlideChange(nextSlide);
@@ -266,7 +264,8 @@ export default function AnimePage() {
                           />
                           
                           {/* Dark gradient overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60
+                           to-black/20"></div>
                           
                           {/* Roman numeral for Diablo style */}
                           <div className="absolute top-2 right-2 text-xs text-violet-500 font-bold">
@@ -294,6 +293,7 @@ export default function AnimePage() {
             </Carousel>
           </div>
         )}
+        
 
         {/* Footer area */}
         <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col md:flex-row justify-between items-center 

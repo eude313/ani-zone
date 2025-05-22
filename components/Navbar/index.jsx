@@ -44,7 +44,8 @@ export default function Navbar({ isScrolled }) {
   
   return (
     <nav 
-      className={`sticky top-0 left-0 right-0 z-50 flex items-center py-2 px-2 md:px-8 transition-all duration-300 ${
+      className={`sticky top-0 left-0 right-0 z-50 flex items-center py-2 px-2 
+        md:px-8 transition-all duration-300 ${
         isScrolled ? 'bg-black/40 backdrop-blur-md backdrop-saturate-150' :
          'bg-gradient-to-b from-black/90 to-transparent'
       }`}
@@ -61,8 +62,8 @@ export default function Navbar({ isScrolled }) {
                       {breadcrumb.label}
                     </BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink className="text-white hover:text-violet-400 whitespace-nowrap">
-                      <Link  href={breadcrumb.href}>{breadcrumb.label}</Link>
+                    <BreadcrumbLink href={breadcrumb.href} className="text-white hover:text-violet-400 whitespace-nowrap">
+                      {breadcrumb.label}
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
@@ -85,8 +86,8 @@ export default function Navbar({ isScrolled }) {
             type="text"
           />
           <Button 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-zinc-400 hover:text-white 
-            bg-transparent rounded-lg cursor-pointer" size="icon"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-zinc-400 
+            hover:text-white bg-transparent rounded-lg cursor-pointer" size="icon"
           >
             <Search/>
           </Button>
