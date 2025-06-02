@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
 import { 
   Carousel,
   CarouselContent,
@@ -8,41 +7,11 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { movies } from '@/data'; 
+import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
-
 export default function AnimePage() {
-  const movies = [
-    {
-      id: 1,
-      title: "Fantastic Beasts: The Secrets of Dumbledore",
-      description: "Professor Albus Dumbledore knows the powerful dark wizard Gellert Grindelwald is moving to seize control of the wizarding world.",
-      image: "/4b87b51538547599d2d23071ef011c53.jpg",
-      tag: "LIVE"
-    },
-    {
-      id: 2,
-      title: "The Batman",
-      description: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption.",
-      image: "/Images/acc94741304eab75c76352042e6e5d8a.jpg",
-      tag: "NEW"
-    },
-    {
-      id: 3,
-      title: "Doctor Strange in the Multiverse of Madness",
-      description: "Dr. Stephen Strange casts a forbidden spell that opens the doorway to the multiverse and unleashes a threat too great to handle.",
-      image: "/Images/7ac24f55b87f9606c6d936a07b0067b5.jpg",
-      tag: "TRENDING"
-    },
-    {
-      id: 4,
-      title: "The Demon slayer",
-      description: "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption.",
-      image: "/Images/975364bd02272db5d2b3037132c62eb6.jpg",
-      tag: "NEW"
-    }
-  ];
-
   const [currentSlide, setCurrentSlide] = useState(0);
   const [api, setApi] = useState();
   const [thumbnailApi, setThumbnailApi] = useState();
@@ -116,7 +85,6 @@ export default function AnimePage() {
         <div className="absolute inset-0 w-full h-screen">
           <Carousel 
             className="w-full h-full" 
-            onValueChange={(value) => setCurrentSlide(parseInt(value))}
             setApi={handleApiChange}
             opts={{
               align: "start",
@@ -226,13 +194,11 @@ export default function AnimePage() {
                 loop: true,
                 slidesToScroll: 1,
               }}
-              value={currentSlide.toString()}
             >
               <CarouselContent className="flex gap-2 px-2">
                 {movies.map((movie, index) => (
                   <CarouselItem
                     key={movie.id}
-                    value={index.toString()}
                     className={`basis-auto flex-shrink-0 transition-all duration-300 my-auto ${
                       currentSlide === index ? 'z-10' : ''
                     }`}
@@ -293,7 +259,6 @@ export default function AnimePage() {
             </Carousel>
           </div>
         )}
-        
 
         {/* Footer area */}
         <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col md:flex-row justify-between items-center 
@@ -326,6 +291,7 @@ export default function AnimePage() {
             </button>
           </div>
         </div>
+        
       </div>
     </div>
   );

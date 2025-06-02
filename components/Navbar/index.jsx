@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button'
 import { Search } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 
 export default function Navbar({ isScrolled }) {
   const pathname = usePathname();
@@ -80,13 +79,13 @@ export default function Navbar({ isScrolled }) {
       <div className="flex-1 mx-2">
         <div className="relative w-full">
           <input
-            className="w-full h-10 px-4 py-2 bg-black/60 text-white placeholder-zinc-400 rounded-md 
+            className="w-full h-10 px-4 py-2 bg-black/60 text-white placeholder-zinc-400 rounded-lg 
             focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
             placeholder="Search..."
             type="text"
           />
           <Button 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-zinc-400 
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 p-1 text-zinc-400 
             hover:text-white bg-transparent rounded-lg cursor-pointer" size="icon"
           >
             <Search/>

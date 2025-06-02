@@ -4,6 +4,7 @@ import Bottombar from '@/components/Bottombar';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function MainLayout({ children }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
@@ -11,6 +12,10 @@ export default function MainLayout({ children }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const containerRef = useRef(null);
+  const pathname = usePathname();
+  
+  const hideNavbarPages = ['/settings', '/profile']; 
+  const shouldHideNavbar = hideNavbarPages.includes(pathname);
   
   useEffect(() => {
     setIsMounted(true);
@@ -54,9 +59,8 @@ export default function MainLayout({ children }) {
   return (
     <div className="flex h-screen overflow-hidden">
       <aside
-        className={`border-r border-[#DBDBDB] shrink-0 hidden sm:block z-10 
-        h-screen overflow-hidden py-[8px] dark:border-[#262626] transition-all duration-300 ease-in-out
-        ${effectiveCollapsed ? 'px-[6px]' : 'px-[12px]'}`}
+        className="border-r border-[#DBDBDB] shrink-0 hidden sm:block z-10 
+        h-screen overflow-hidden py-[8px] dark:border-[#262626] transition-all duration-300 ease-in-out"
         style={{ width: sidebarWidth }}
         aria-label="Sidebar"
       >
@@ -67,9 +71,12 @@ export default function MainLayout({ children }) {
         />  
       </aside>
       <div className="flex-1 overflow-y-auto" ref={containerRef}>
-        <Navbar isScrolled={isScrolled}/>
+        {!shouldHideNavbar && <Navbar isScrolled={isScrolled} />}
+        
         <main 
-          className="overflow-x-hidden overflow-y-hidden -mt-[56px] h-[100rem]"
+          className={`overflow-x-hidden overflow-y-hidden h-[100rem] ${
+            shouldHideNavbar ? '' : '-mt-[56px]'
+          }`}
         >
           {children}
         </main>
