@@ -2,8 +2,6 @@ import {
   House, 
   Radio, 
   Calendar,
-  // GalleryVerticalEnd 
-  SlidersVertical,
   Folder, 
   Compass, 
   MessageSquare, 
@@ -15,22 +13,18 @@ export const navigationItems = [
   {
     title: 'Home',
     icon: House,
-    href: '/',
     hasSubmenu: true,
     submenuItems: [
-      { title: 'Anime', href: '/anime' },
-      { title: 'Manga', href: '/manga' }
-    ]
-  },
-  {
-    title: 'Types',
-    icon: SlidersVertical,
-    href: '/customers',
-    hasSubmenu: true,
-    submenuItems: [
-      { title: 'OVAs', href: '/customers/badges', isActive: true },
-      { title: 'ONAs', href: '/customers/logs' },
-      { title: 'Specials', href: '/customers/vouchers' }
+      { 
+        title: 'Anime', 
+        href: '/anime',
+        dotColor: 'bg-red-500'
+      },
+      { 
+        title: 'Manga', 
+        href: '/manga',
+        dotColor: 'bg-green-500'
+      }
     ]
   },
   {
