@@ -1,13 +1,14 @@
 import { 
-  House, 
-  Radio, 
-  Calendar,
-  Folder, 
-  Compass, 
-  MessageSquare, 
-  Settings, 
-  CircleHelp
+  House, Calendar, Folder, Compass, 
+  MessageSquare, Settings, CircleHelp,
+
+  Sword, Map, Car, Laugh, Brain, Flame, Drama, Eye, Sparkles,
+  Gamepad2, Users, Scroll, Skull, Orbit, Flower, Baby, Wand, 
+  HandMetal, Bot, Shield, Music, Search, Theater, BadgeCheck,
+  Activity, Heart, Landmark, BookOpen, Atom, Cigarette, Star, Venus, 
+  Mars, Coffee, Rocket, Trophy, Zap, Ghost, UtensilsCrossed, Droplet
 } from 'lucide-react';
+
 
 export const navigationItems = [
   {
@@ -62,7 +63,6 @@ export const bottomItems = [
   }
 ];
 
-
 export const movies = [
     {
       id: 1,
@@ -92,4 +92,50 @@ export const movies = [
       image: "/Images/975364bd02272db5d2b3037132c62eb6.jpg",
       tag: "NEW"
     }
-  ];
+];
+
+export const genres = [
+  { id: 1, name: "All", icon: null, isDefault: true },
+  { id: 2, name: "Action", icon: Sword},
+  { id: 3, name: "Adventure", icon: Map},
+  { id: 4, name: "Cars", icon: Car},
+  { id: 5, name: "Comedy", icon: Laugh},
+  { id: 6, name: "Dementia", icon: Brain},
+  { id: 7, name: "Demons", icon: Flame},
+  { id: 8, name: "Drama", icon: Drama},
+  { id: 9, name: "Ecchi", icon: Eye},
+  { id: 10, name: "Fantasy", icon: Sparkles},
+  { id: 11, name: "Game", icon: Gamepad2},
+  { id: 12, name: "Harem", icon: Users},
+  { id: 13, name: "Historical", icon: Scroll},
+  { id: 14, name: "Horror", icon: Skull},
+  { id: 15, name: "Isekai", icon: Orbit},
+  { id: 16, name: "Josei", icon: Flower},
+  { id: 17, name: "Kids", icon: Baby},
+  { id: 18, name: "Magic", icon: Wand},
+  { id: 19, name: "Martial Arts", icon: HandMetal},
+  { id: 20, name: "Mecha", icon: Bot},
+  { id: 21, name: "Military", icon: Shield},
+  { id: 22, name: "Music", icon: Music},
+  { id: 23, name: "Mystery", icon: Search},
+  { id: 24, name: "Parody", icon: Theater},
+  { id: 25, name: "Police", icon: BadgeCheck},
+  { id: 26, name: "Psychological", icon: Activity},
+  { id: 27, name: "Romance", icon: Heart},
+  { id: 28, name: "Samurai", icon: Landmark},
+  { id: 29, name: "School", icon: BookOpen},
+  { id: 30, name: "Sci-Fi", icon: Atom},
+  { id: 31, name: "Seinen", icon: Cigarette},
+  { id: 32, name: "Shoujo", icon: Star},
+  { id: 33, name: "Shoujo Ai", icon: Venus},
+  { id: 34, name: "Shounen", icon: Zap},
+  { id: 35, name: "Shounen Ai", icon: Mars},
+  { id: 36, name: "Slice of Life", icon: Coffee},
+  { id: 37, name: "Space", icon: Rocket},
+  { id: 38, name: "Sports", icon: Trophy},
+  { id: 39, name: "Super Power", icon: Zap},
+  { id: 40, name: "Supernatural", icon: Ghost},
+  { id: 41, name: "Thriller", icon: UtensilsCrossed},
+  { id: 42, name: "Vampire", icon: Droplet},
+];
+
