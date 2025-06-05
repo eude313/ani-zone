@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ThemeProvider } from "next-themes";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export function Providers({ children }) {
   
@@ -12,7 +13,9 @@ export function Providers({ children }) {
             enableSystem
             disableTransitionOnChange
         >
-            {children}
+            <LanguageProvider>
+                {children}
+            </LanguageProvider>
         </ThemeProvider>
     )
 }
