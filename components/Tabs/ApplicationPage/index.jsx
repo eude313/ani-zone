@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Languages, Cookie, CircleFadingPlus } from 'lucide-react';
+import { Languages, Cookie, CircleFadingPlus, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import {
   Select,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from '@/components/ui/switch';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
 
 export default function ApplicationPage() {
     const [cookiesEnabled, setCookiesEnabled] = useState(false);
@@ -37,7 +38,7 @@ export default function ApplicationPage() {
     const handleDataSaverToggle = (enabled) => {
         setDataSaverEnabled(enabled);
     }
-    
+
     return (
         <div className='space-y-8 max-w-4xl mx-auto p-6'>
             <div className="mb-10">
@@ -125,6 +126,25 @@ export default function ApplicationPage() {
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                         <strong>Data Saver:</strong> {DataSaverEnabled ? 'Enabled' : 'Disabled'}
                     </p>
+                </div>
+            </div>
+            <Separator/>
+            
+            <div className="mb-8">
+                <div className="flex items-center space-x-2 mb-4"> 
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Clear App Data</h2>
+                    <span className="bg-red-400 dark:bg-red-900 text-white text-xs px-2 py-1 rounded-sm border-l-2 border-red-700 dark:border-red-600 uppercase tracking-wider flex items-center">
+                        <Trash2 size={14}/>
+                    </span>
+                </div>
+
+                <div className="flex justify-between items-center space-x-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <strong>Note:</strong> All saved content, search history, and cookies will be permanently removed from the app.
+                    </p>
+                    <Button  variant="destructive">
+                        Clear Data
+                    </Button>
                 </div>
             </div>
             <Separator/>
