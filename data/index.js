@@ -1,6 +1,6 @@
 import { 
-  House, Calendar, Folder, Compass, 
-  MessageSquare, Settings, CircleHelp,
+  House, Calendar, Folder, Compass, Monitor, 
+  MessageSquare, Settings, CircleHelp, Sun, Moon,
 
   Sword, Map, Car, Laugh, Brain, Flame, Drama, Eye, Sparkles,
   Gamepad2, Users, Scroll, Skull, Orbit, Flower, Baby, Wand, 
@@ -139,3 +139,30 @@ export const genres = [
   { id: 42, name: "Vampire", icon: Droplet},
 ];
 
+
+export const themes = [
+  {
+    id: 'light',
+    title: 'Light theme',
+    description: 'This theme will activate when your system is set to light mode',
+    icon: Sun,
+    imageUrl: '/Images/Screenshot from 2025-06-04 14-56-31.png',
+    bottomText: 'Default light'
+  },
+  {
+    id: 'dark',
+    title: 'Dark theme', 
+    description: 'This theme will activate when your system is set to dark mode',
+    icon: Moon,
+    imageUrl: '/Images/Screenshot from 2025-06-04 14-57-48.png',
+    bottomText: 'Default dark'
+  },
+  {
+    id: 'system',
+    title: 'System',
+    description: 'This is the theme that will take it your system is using',
+    icon: Monitor,
+    imageUrl: '/Images/Screenshot from 2025-06-04 14-58-03.png',
+    bottomText: 'Default system'
+  }
+];

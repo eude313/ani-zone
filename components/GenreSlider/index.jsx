@@ -6,10 +6,8 @@ import { Button } from '@/components/ui/button';
 import { genres } from '@/data'; 
 
 import 'swiper/css';
-import 'swiper/css/pagination';
 
-// import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 
 export default function GenreSlider() {
     const [isBeginning, setIsBeginning] = useState(true);

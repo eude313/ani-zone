@@ -74,7 +74,7 @@ export default function MainLayout({ children }) {
         {!shouldHideNavbar && <Navbar isScrolled={isScrolled} />}
         
         <main 
-          className={`overflow-x-hidden overflow-y-hidden h-[100rem] ${
+          className={`overflow-x-hidden overflow-y-hidden h-auto ${
             shouldHideNavbar ? '' : '-mt-[56px]'
           }`}
         >
